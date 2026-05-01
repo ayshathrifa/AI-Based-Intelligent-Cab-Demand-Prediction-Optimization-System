@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from models.predict_model import predict_demand
+from services.demand_service import predict_demand
 from database.db import get_db, log_event
 from datetime import datetime
 

@@ -1,3 +1,6 @@
+import sys, os
+sys.path.insert(0, os.path.dirname(__file__))
+
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from config import Config
@@ -17,7 +20,10 @@ app = Flask(__name__, static_folder='../frontend', static_url_path='')
 app.config.from_object(Config)
 CORS(app)
 
-# Register blueprints
+# Ensure DB tables exist on startup (works with both gunicorn and direct run)
+with app.app_context():
+    init_db()
+
 app.register_blueprint(auth_bp, url_prefix='/api/auth')
 app.register_blueprint(prediction_bp, url_prefix='/api/prediction')
 app.register_blueprint(realtime_bp, url_prefix='/api/realtime')
@@ -46,4 +52,4 @@ def js(filename):
 
 if __name__ == '__main__':
     init_db()
-    app.run(debug=True, port=5000)
+    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
