@@ -34,9 +34,9 @@ app.register_blueprint(train_bp, url_prefix='/api/train')
 app.register_blueprint(insights_bp, url_prefix='/api/insights')
 app.register_blueprint(admin_bp, url_prefix='/api/admin')
 
-@app.route('/')
-def index():
-    return send_from_directory('../frontend/pages', 'index.html')
+@app.route("/")
+def home():
+    return "Cab Demand Prediction API is running"
 
 @app.route('/pages/<path:filename>')
 def pages(filename):
