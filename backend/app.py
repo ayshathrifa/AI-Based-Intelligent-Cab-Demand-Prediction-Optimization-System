@@ -1,13 +1,12 @@
 import sys, os
 
 # Always resolve paths relative to this file's location
-THIS_FILE = os.path.abspath(__file__)
-BACKEND_DIR  = os.path.dirname(THIS_FILE)
-PROJECT_DIR  = os.path.dirname(BACKEND_DIR)
-FRONTEND_DIR = os.path.join(PROJECT_DIR, 'frontend')
-PAGES_DIR    = os.path.join(FRONTEND_DIR, 'pages')
-CSS_DIR      = os.path.join(FRONTEND_DIR, 'css')
-JS_DIR       = os.path.join(FRONTEND_DIR, 'js')
+BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+PAGES_DIR = os.path.join(FRONTEND_DIR, "pages")
+CSS_DIR = os.path.join(FRONTEND_DIR, "css")
+JS_DIR = os.path.join(FRONTEND_DIR, "js")
 
 sys.path.insert(0, BACKEND_DIR)
 
