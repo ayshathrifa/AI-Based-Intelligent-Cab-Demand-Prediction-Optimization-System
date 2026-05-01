@@ -1,5 +1,15 @@
 import sys, os
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+
+# Always resolve paths relative to this file's location
+THIS_FILE = os.path.abspath(__file__)
+BACKEND_DIR  = os.path.dirname(THIS_FILE)
+PROJECT_DIR  = os.path.dirname(BACKEND_DIR)
+FRONTEND_DIR = os.path.join(PROJECT_DIR, 'frontend')
+PAGES_DIR    = os.path.join(FRONTEND_DIR, 'pages')
+CSS_DIR      = os.path.join(FRONTEND_DIR, 'css')
+JS_DIR       = os.path.join(FRONTEND_DIR, 'js')
+
+sys.path.insert(0, BACKEND_DIR)
 
 from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
@@ -15,15 +25,6 @@ from routes.upload import upload_bp
 from routes.train import train_bp
 from routes.insights import insights_bp
 from routes.admin import admin_bp
-
-# Absolute path of this file (backend/app.py)
-BASE_DIR  = os.path.dirname(os.path.abspath(__file__))
-
-# Walk up one level to project root, then into frontend
-ROOT_DIR  = os.path.dirname(BASE_DIR)
-PAGES_DIR = os.path.join(ROOT_DIR, 'frontend', 'pages')
-CSS_DIR   = os.path.join(ROOT_DIR, 'frontend', 'css')
-JS_DIR    = os.path.join(ROOT_DIR, 'frontend', 'js')
 
 app = Flask(__name__)
 app.config.from_object(Config)
@@ -45,11 +46,13 @@ app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 @app.route('/debug')
 def debug():
     return jsonify({
-        'base_dir':  BASE_DIR,
-        'pages_dir': PAGES_DIR,
-        'pages_exists': os.path.exists(PAGES_DIR),
-        'index_exists': os.path.exists(os.path.join(PAGES_DIR, 'index.html')),
-        'cwd': os.getcwd()
+        'backend_dir':    BACKEND_DIR,
+        'project_dir':    PROJECT_DIR,
+        'frontend_dir':   FRONTEND_DIR,
+        'pages_exists':   os.path.exists(PAGES_DIR),
+        'index_exists':   os.path.exists(os.path.join(PAGES_DIR, 'index.html')),
+        'cwd':            os.getcwd(),
+        'pages_files':    os.listdir(PAGES_DIR) if os.path.exists(PAGES_DIR) else []
     })
 
 @app.route('/')
