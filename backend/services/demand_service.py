@@ -1,20 +1,4 @@
-import os
-import pickle
-
-model_path = os.path.join("models", "lr_model.pkl")
-
-with open(model_path, "rb") as f:
-    model = pickle.load(f)
-
-def predict_demand(hour, day, zone, weather, temperature):
-    # Example input (modify based on your model)
-    features = [[hour, day, temperature]]
-
-    prediction = model.predict(features)
-
-    return {
-        "predicted_demand": int(prediction[0])
-    }
+from models.predict_model import predict_demand
 from datetime import datetime
 
 ZONES = ['downtown', 'airport', 'suburbs', 'mall', 'hospital', 'university', 'station', 'business_park', 'old_city']
