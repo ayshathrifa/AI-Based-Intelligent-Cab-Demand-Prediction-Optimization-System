@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dashboard - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>📊 Main <span>Dashboard</span></h1>
+  <p>Overview of cab demand across all zones and time periods</p>
+</div>
+
+<div class="container">
+  <div class="grid-4" style="margin-bottom:30px">
+    <div class="stat-card">
+      <div class="value" id="total-demand">—</div>
+      <div class="label">Total Demand Today</div>
+    </div>
+    <div class="stat-card" style="border-color:#f5a623">
+      <div class="value" style="color:#f5a623" id="peak-hour">—</div>
+      <div class="label">Peak Hour</div>
+    </div>
+    <div class="stat-card" style="border-color:#4caf50">
+      <div class="value" style="color:#4caf50" id="active-drivers">—</div>
+      <div class="label">Active Drivers</div>
+    </div>
+    <div class="stat-card" style="border-color:#a855f7">
+      <div class="value" style="color:#a855f7" id="top-zone">—</div>
+      <div class="label">Top Zone</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card">
+      <h3>Daily Demand Trend</h3>
+      <div class="chart-container">
+        <canvas id="daily-chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Weekly Demand Overview</h3>
+      <div class="chart-container">
+        <canvas id="weekly-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Zone-wise Demand</h3>
+      <div class="chart-container">
+        <canvas id="zone-chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Recent Predictions</h3>
+      <table>
+        <thead><tr><th>Time</th><th>Zone</th><th>Demand</th><th>Status</th></tr></thead>
+        <tbody id="recent-table">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">Loading...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script src="../js/charts.js"></script>
+<script src="../js/main.js"></script>
+</body>
+</html>

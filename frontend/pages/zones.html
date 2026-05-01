@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zone Demand - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>📍 Zone-Based <span>Demand</span></h1>
+  <p>Area-wise demand analysis across all city zones</p>
+</div>
+
+<div class="container">
+  <div style="margin-bottom:20px;display:flex;gap:12px;flex-wrap:wrap">
+    <select id="time-filter" class="form-group" style="margin:0;width:auto">
+      <option value="now">Right Now</option>
+      <option value="morning">Morning Peak</option>
+      <option value="evening">Evening Peak</option>
+      <option value="night">Night</option>
+    </select>
+    <select id="day-filter" style="padding:10px 14px;background:var(--darker);border:1px solid #333;border-radius:8px;color:var(--text)">
+      <option value="weekday">Weekday</option>
+      <option value="weekend">Weekend</option>
+    </select>
+    <button class="btn btn-primary" onclick="loadZones()">Apply Filter</button>
+  </div>
+
+  <div class="grid-3" id="zones-grid" style="margin-bottom:30px">
+    <!-- Populated by JS -->
+  </div>
+
+  <div class="card">
+    <h3>Zone Demand Comparison</h3>
+    <div class="chart-container" style="height:350px">
+      <canvas id="zone-bar-chart"></canvas>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  const zones = [
+    {name:'Downtown', demand:87, trend:'↑', color:'#6c63ff'},
+    {name:'Airport', demand:72, trend:'↑', color:'#f5a623'},
+    {name:'Suburbs', demand:34, trend:'↓', color:'#4caf50'},
+    {name:'Shopping Mall', demand:65, trend:'↑', color:'#a855f7'},
+    {name:'Hospital Area', demand:48, trend:'→', color:'#f44336'},
+    {name:'University', demand:55, trend:'↑', color:'#00bcd4'},
+    {name:'Railway Station', demand:91, trend:'↑', color:'#ff9800'},
+    {name:'Business Park', demand:43, trend:'↓', color:'#e91e63'},
+    {name:'Old City', demand:29, trend:'↓', color:'#607d8b'}
+  ];
+
+  function loadZones() {
+    const grid = document.getElementById('zones-grid');
+    grid.innerHTML = zones.map(z => `
+      <div class="zone-card" onclick="selectZone('${z.name}')">
+        <div style="display:flex;justify-content:space-between;align-items:center">
+          <h3>${z.name}</h3>
+          <span style="font-size:1.2rem">${z.trend}</span>
+        </div>
+        <div class="zone-demand" style="color:${z.color}">${z.demand}</div>
+        <div style="color:var(--muted);font-size:0.85rem">rides/hour</div>
+        <div class="progress-bar" style="margin-top:12px">
+          <div class="progress-fill" style="width:${z.demand}%;background:${z.color}"></div>
+        </div>
+      </div>`).join('');
+
+    const ctx = document.getElementById('zone-bar-chart').getContext('2d');
+    if (window.zoneChart) window.zoneChart.destroy();
+    window.zoneChart = new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: zones.map(z => z.name),
+        datasets: [{
+          label: 'Demand (rides/hr)',
+          data: zones.map(z => z.demand),
+          backgroundColor: zones.map(z => z.color + 'cc'),
+          borderColor: zones.map(z => z.color),
+          borderWidth: 2,
+          borderRadius: 6
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        plugins: {legend: {labels: {color: '#e0e0e0'}}},
+        scales: {
+          x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+          y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}}
+        }
+      }
+    });
+  }
+
+  function selectZone(name) {
+    window.location.href = `prediction.html?zone=${encodeURIComponent(name)}`;
+  }
+
+  loadZones();
+</script>
+</body>
+</html>

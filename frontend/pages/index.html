@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>CabDemand AI - Home</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="/pages/dashboard.html">Dashboard</a></li>
+    <li><a href="/pages/prediction.html">Predict</a></li>
+    <li><a href="/pages/zones.html">Zones</a></li>
+    <li><a href="/pages/heatmap.html">Heatmap</a></li>
+    <li><a href="/pages/insights.html">Insights</a></li>
+    <li><a href="/pages/about.html">About</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="/pages/login.html" class="btn btn-outline">Login</a>
+    <a href="/pages/signup.html" class="btn btn-primary">Sign Up</a>
+  </div>
+</nav>
+
+<section class="hero">
+  <h1>Predict <span>Cab Demand</span> with AI</h1>
+  <p>Real-time demand forecasting powered by machine learning. Optimize driver allocation, reduce wait times, and maximize revenue.</p>
+  <a href="/pages/prediction.html" class="btn btn-primary" style="margin-right:12px">Try Prediction</a>
+  <a href="/pages/dashboard.html" class="btn btn-outline">View Dashboard</a>
+</section>
+
+<section class="section container">
+  <div class="grid-4">
+    <div class="stat-card">
+      <div class="value">94%</div>
+      <div class="label">Prediction Accuracy</div>
+    </div>
+    <div class="stat-card" style="border-color:#f5a623">
+      <div class="value" style="color:#f5a623">12K+</div>
+      <div class="label">Daily Predictions</div>
+    </div>
+    <div class="stat-card" style="border-color:#4caf50">
+      <div class="value" style="color:#4caf50">18</div>
+      <div class="label">Zones Covered</div>
+    </div>
+    <div class="stat-card" style="border-color:#a855f7">
+      <div class="value" style="color:#a855f7">2</div>
+      <div class="label">ML Models</div>
+    </div>
+  </div>
+</section>
+
+<section class="section" style="background:var(--darker)">
+  <div class="container">
+    <h2 style="text-align:center;margin-bottom:40px">Core Features</h2>
+    <div class="grid-3">
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">🤖</div>
+        <h3>Demand Prediction</h3>
+        <p style="color:var(--muted);font-size:0.9rem">Predict cab demand based on time, location, day, and weather conditions using Random Forest & Linear Regression.</p>
+        <a href="/pages/prediction.html" class="btn btn-outline" style="margin-top:16px">Try Now</a>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">🔥</div>
+        <h3>Demand Heatmap</h3>
+        <p style="color:var(--muted);font-size:0.9rem">Visualize demand intensity across all city zones with an interactive color-coded heatmap.</p>
+        <a href="/pages/heatmap.html" class="btn btn-outline" style="margin-top:16px">View Map</a>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">🚗</div>
+        <h3>Driver Allocation</h3>
+        <p style="color:var(--muted);font-size:0.9rem">AI-powered suggestions to deploy drivers where demand is highest, reducing idle time.</p>
+        <a href="/pages/driver.html" class="btn btn-outline" style="margin-top:16px">Allocate</a>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">⚡</div>
+        <h3>Real-Time Prediction</h3>
+        <p style="color:var(--muted);font-size:0.9rem">Auto-detects current time and location for instant demand prediction without manual input.</p>
+        <a href="/pages/realtime.html" class="btn btn-outline" style="margin-top:16px">Go Live</a>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">🧠</div>
+        <h3>AI Insights</h3>
+        <p style="color:var(--muted);font-size:0.9rem">Discover patterns like "Weekend demand is 40% higher" or "Rain increases demand by 25%".</p>
+        <a href="/pages/insights.html" class="btn btn-outline" style="margin-top:16px">Explore</a>
+      </div>
+      <div class="card">
+        <div style="font-size:2rem;margin-bottom:12px">📊</div>
+        <h3>Data Visualization</h3>
+        <p style="color:var(--muted);font-size:0.9rem">Interactive bar charts, line graphs, and area trends for comprehensive demand analysis.</p>
+        <a href="/pages/visualization.html" class="btn btn-outline" style="margin-top:16px">View Charts</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 CabDemand AI. Built with Machine Learning & Flask.</p>
+</footer>
+</body>
+</html>

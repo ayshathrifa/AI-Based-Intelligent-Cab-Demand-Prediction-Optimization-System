@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Model Comparison - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>⚖️ Model <span>Comparison</span></h1>
+  <p>Random Forest vs Linear Regression — performance analysis</p>
+</div>
+
+<div class="container">
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card" style="border-top:4px solid var(--primary)">
+      <h3>🌲 Random Forest</h3>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Accuracy</span><span style="color:var(--primary);font-weight:700">94.2%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:94.2%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>R² Score</span><span style="color:var(--primary);font-weight:700">0.91</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:91%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>MAE</span><span style="color:var(--primary);font-weight:700">3.8</span></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>Training Time</span><span style="color:var(--muted)">12.4s</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Prediction Speed</span><span style="color:var(--muted)">45ms</span></div>
+      </div>
+      <div class="alert alert-success" style="margin-top:16px">✅ Recommended Model</div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--secondary)">
+      <h3>📈 Linear Regression</h3>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Accuracy</span><span style="color:var(--secondary);font-weight:700">81.5%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:81.5%;background:var(--secondary)"></div></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>R² Score</span><span style="color:var(--secondary);font-weight:700">0.78</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:78%;background:var(--secondary)"></div></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>MAE</span><span style="color:var(--secondary);font-weight:700">7.2</span></div>
+        <div style="display:flex;justify-content:space-between;margin:12px 0 6px"><span>Training Time</span><span style="color:var(--muted)">0.8s</span></div>
+        <div style="display:flex;justify-content:space-between"><span>Prediction Speed</span><span style="color:var(--muted)">5ms</span></div>
+      </div>
+      <div class="alert alert-info" style="margin-top:16px">ℹ️ Faster, less accurate</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card">
+      <h3>Accuracy Comparison</h3>
+      <div class="chart-container">
+        <canvas id="accuracy-chart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Prediction vs Actual</h3>
+      <div class="chart-container">
+        <canvas id="pred-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Detailed Metrics Table</h3>
+    <table style="margin-top:12px">
+      <thead><tr><th>Metric</th><th>Random Forest</th><th>Linear Regression</th><th>Winner</th></tr></thead>
+      <tbody>
+        <tr><td>Accuracy</td><td style="color:var(--primary)">94.2%</td><td>81.5%</td><td>🌲 RF</td></tr>
+        <tr><td>R² Score</td><td style="color:var(--primary)">0.91</td><td>0.78</td><td>🌲 RF</td></tr>
+        <tr><td>MAE</td><td style="color:var(--primary)">3.8</td><td>7.2</td><td>🌲 RF</td></tr>
+        <tr><td>RMSE</td><td style="color:var(--primary)">5.1</td><td>9.4</td><td>🌲 RF</td></tr>
+        <tr><td>Training Time</td><td>12.4s</td><td style="color:var(--secondary)">0.8s</td><td>📈 LR</td></tr>
+        <tr><td>Prediction Speed</td><td>45ms</td><td style="color:var(--secondary)">5ms</td><td>📈 LR</td></tr>
+        <tr><td>Handles Non-linearity</td><td style="color:var(--primary)">✅ Yes</td><td>❌ No</td><td>🌲 RF</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  new Chart(document.getElementById('accuracy-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Accuracy', 'R² Score ×100', 'Precision', 'Recall'],
+      datasets: [
+        {label: 'Random Forest', data: [94.2, 91, 93, 92], backgroundColor: 'rgba(108,99,255,0.7)', borderColor: '#6c63ff', borderWidth: 2, borderRadius: 6},
+        {label: 'Linear Regression', data: [81.5, 78, 80, 79], backgroundColor: 'rgba(245,166,35,0.7)', borderColor: '#f5a623', borderWidth: 2, borderRadius: 6}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#e0e0e0'}}},
+      scales: {
+        x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+        y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}, max: 100}
+      }
+    }
+  });
+
+  const actual = Array.from({length:20}, () => Math.floor(Math.random()*60+20));
+  const rfPred = actual.map(v => v + (Math.random()-0.5)*8);
+  const lrPred = actual.map(v => v + (Math.random()-0.5)*18);
+
+  new Chart(document.getElementById('pred-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: actual.map((_,i) => `S${i+1}`),
+      datasets: [
+        {label: 'Actual', data: actual, borderColor: '#4caf50', borderWidth: 2, pointRadius: 3, tension: 0.3},
+        {label: 'RF Predicted', data: rfPred, borderColor: '#6c63ff', borderWidth: 2, pointRadius: 2, tension: 0.3, borderDash: [5,3]},
+        {label: 'LR Predicted', data: lrPred, borderColor: '#f5a623', borderWidth: 2, pointRadius: 2, tension: 0.3, borderDash: [5,3]}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#e0e0e0'}}},
+      scales: {
+        x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+        y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}}
+      }
+    }
+  });
+</script>
+</body>
+</html>

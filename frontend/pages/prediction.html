@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demand Prediction - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script>
+  (function(){
+    if(localStorage.getItem('token')){
+      document.getElementById('nav-login').style.display='none';
+      document.getElementById('nav-logout').style.display='inline-block';
+    }
+    document.getElementById('nav-logout').addEventListener('click',function(e){
+      e.preventDefault();
+      localStorage.removeItem('token');
+      localStorage.removeItem('username');
+      window.location.href='/pages/login.html';
+    });
+  })();
+</script>
+
+<div class="page-header">
+  <h1>🤖 Demand <span>Prediction</span></h1>
+  <p>Enter parameters to predict cab demand using ML models</p>
+</div>
+
+<div class="container">
+  <div class="grid-2">
+    <div class="card">
+      <h3>Prediction Inputs</h3>
+      <form id="predict-form" style="margin-top:16px">
+        <div class="form-group">
+          <label>Time (Hour)</label>
+          <input type="number" id="hour" min="0" max="23" placeholder="0-23" required/>
+        </div>
+        <div class="form-group">
+          <label>Day of Week</label>
+          <select id="day">
+            <option value="0">Monday</option>
+            <option value="1">Tuesday</option>
+            <option value="2">Wednesday</option>
+            <option value="3">Thursday</option>
+            <option value="4">Friday</option>
+            <option value="5">Saturday</option>
+            <option value="6">Sunday</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Location / Zone</label>
+          <select id="zone">
+            <option value="downtown">Downtown</option>
+            <option value="airport">Airport</option>
+            <option value="suburbs">Suburbs</option>
+            <option value="mall">Shopping Mall</option>
+            <option value="hospital">Hospital Area</option>
+            <option value="university">University</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Weather Condition 🌧️</label>
+          <select id="weather">
+            <option value="clear">Clear / Sunny</option>
+            <option value="cloudy">Cloudy</option>
+            <option value="rain">Rainy</option>
+            <option value="heavy_rain">Heavy Rain</option>
+            <option value="fog">Foggy</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Temperature (°C)</label>
+          <input type="number" id="temperature" placeholder="e.g. 28" min="-10" max="50"/>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%">🔮 Predict Demand</button>
+      </form>
+    </div>
+
+    <div>
+      <div id="result-section" style="display:none">
+        <div class="result-box">
+          <div class="result-label">Predicted Cab Demand</div>
+          <div class="result-value" id="predicted-value">—</div>
+          <div class="result-label">rides in next hour</div>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <h3>Prediction Details</h3>
+          <table style="margin-top:12px">
+            <tbody id="details-table"></tbody>
+          </table>
+        </div>
+        <div class="card" style="margin-top:20px">
+          <h3>Recommendation</h3>
+          <p id="recommendation" style="color:var(--muted);margin-top:8px"></p>
+        </div>
+      </div>
+      <div id="loading" style="display:none;text-align:center;padding:40px">
+        <div class="spinner"></div>
+        <p style="color:var(--muted)">Running ML model...</p>
+      </div>
+      <div class="card" id="placeholder-card">
+        <div style="text-align:center;padding:40px;color:var(--muted)">
+          <div style="font-size:4rem;margin-bottom:16px">🔮</div>
+          <p>Fill in the form and click Predict to see results</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script src="../js/prediction.js"></script>
+</body>
+</html>

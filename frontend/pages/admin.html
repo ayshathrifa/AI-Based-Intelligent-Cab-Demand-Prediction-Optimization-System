@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Dashboard - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>⚙️ Admin <span>Dashboard</span></h1>
+  <p>System management and control panel</p>
+</div>
+
+<div class="container">
+  <div class="grid-4" style="margin-bottom:30px">
+    <div class="stat-card"><div class="value">1,284</div><div class="label">Total Users</div></div>
+    <div class="stat-card" style="border-color:#f5a623"><div class="value" style="color:#f5a623">48K</div><div class="label">Predictions Made</div></div>
+    <div class="stat-card" style="border-color:#4caf50"><div class="value" style="color:#4caf50">94%</div><div class="label">Model Accuracy</div></div>
+    <div class="stat-card" style="border-color:#a855f7"><div class="value" style="color:#a855f7">2</div><div class="label">Active Models</div></div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:30px">
+    <a href="upload.html" style="text-decoration:none">
+      <div class="card" style="text-align:center;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="font-size:2.5rem;margin-bottom:12px">📤</div>
+        <h3>Upload Dataset</h3>
+        <p style="color:var(--muted);font-size:0.85rem;margin-top:8px">Upload new CSV data for training</p>
+      </div>
+    </a>
+    <a href="train.html" style="text-decoration:none">
+      <div class="card" style="text-align:center;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="font-size:2.5rem;margin-bottom:12px">🧠</div>
+        <h3>Train Model</h3>
+        <p style="color:var(--muted);font-size:0.85rem;margin-top:8px">Retrain ML models with new data</p>
+      </div>
+    </a>
+    <a href="compare.html" style="text-decoration:none">
+      <div class="card" style="text-align:center;cursor:pointer;transition:transform 0.2s" onmouseover="this.style.transform='translateY(-4px)'" onmouseout="this.style.transform=''">
+        <div style="font-size:2.5rem;margin-bottom:12px">⚖️</div>
+        <h3>Compare Models</h3>
+        <p style="color:var(--muted);font-size:0.85rem;margin-top:8px">RF vs Linear Regression analysis</p>
+      </div>
+    </a>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>User Management</h3>
+      <table style="margin-top:12px">
+        <thead><tr><th>Name</th><th>Email</th><th>Role</th><th>Action</th></tr></thead>
+        <tbody id="user-table-body"><tr><td colspan="4" style="color:var(--muted)">Loading...</td></tr></tbody>
+      </table>
+    </div>
+
+    <!-- Edit Modal -->
+    <div id="edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.6);z-index:999;align-items:center;justify-content:center">
+      <div class="card" style="width:320px;padding:24px">
+        <h3 style="margin-bottom:16px">Edit User</h3>
+        <div id="edit-alert"></div>
+        <div class="form-group">
+          <label>Name</label>
+          <input id="edit-name" type="text" disabled style="opacity:0.6"/>
+        </div>
+        <div class="form-group">
+          <label>Role</label>
+          <select id="edit-role">
+            <option value="user">User</option>
+            <option value="driver">Driver</option>
+            <option value="admin">Admin</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:8px">
+          <button class="btn btn-primary" style="flex:1" onclick="saveUser()">Save</button>
+          <button class="btn btn-outline" style="flex:1" onclick="closeModal()">Cancel</button>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>System Logs</h3>
+      <div style="margin-top:12px;font-family:monospace;font-size:0.8rem;color:var(--muted);max-height:200px;overflow-y:auto" id="logs">
+        <div style="color:var(--muted)">Loading logs...</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:30px">
+    <h3>📬 Contact Inquiries</h3>
+    <div style="margin-top:12px;max-height:260px;overflow-y:auto" id="inquiries-list">
+      <div style="color:var(--muted)">Loading...</div>
+    </div>
+  </div>
+
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  // --- Logs ---
+  const colors = { INFO: '#4caf50', WARN: '#f5a623', ERROR: '#f44336' };
+  fetch('/api/admin/logs')
+    .then(r => r.json())
+    .then(logs => {
+      const box = document.getElementById('logs');
+      if (!logs.length) { box.innerHTML = '<div>No logs yet.</div>'; return; }
+      box.innerHTML = logs.map(l =>
+        `<div style="color:${colors[l.level] || '#ccc'}">[${l.level}] ${l.created_at} — ${l.message}</div>`
+      ).join('');
+    })
+    .catch(() => document.getElementById('logs').innerHTML = '<div style="color:#f44336">Failed to load logs.</div>');
+
+  // --- User Management ---
+  let editingUserId = null;
+
+  function loadUsers() {
+    fetch('/api/admin/users')
+      .then(r => r.json())
+      .then(users => {
+        const tbody = document.getElementById('user-table-body');
+        if (!users.length) { tbody.innerHTML = '<tr><td colspan="4" style="color:var(--muted)">No users found.</td></tr>'; return; }
+        tbody.innerHTML = users.map(u => `
+          <tr>
+            <td>${u.name}</td>
+            <td style="font-size:0.8rem;color:var(--muted)">${u.email}</td>
+            <td><span class="badge badge-success">${u.role}</span></td>
+            <td><button class="btn btn-outline" style="padding:4px 10px;font-size:0.8rem" onclick="openModal(${u.id}, '${u.name}', '${u.role}')">Edit</button></td>
+          </tr>`).join('');
+      })
+      .catch(() => document.getElementById('user-table-body').innerHTML = '<tr><td colspan="4" style="color:#f44336">Failed to load users.</td></tr>');
+  }
+
+  function openModal(id, name, role) {
+    editingUserId = id;
+    document.getElementById('edit-name').value = name;
+    document.getElementById('edit-role').value = role;
+    document.getElementById('edit-alert').innerHTML = '';
+    const modal = document.getElementById('edit-modal');
+    modal.style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('edit-modal').style.display = 'none';
+    editingUserId = null;
+  }
+
+  function saveUser() {
+    const role = document.getElementById('edit-role').value;
+    fetch(`/api/admin/users/${editingUserId}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ role })
+    })
+    .then(r => r.json())
+    .then(data => {
+      document.getElementById('edit-alert').innerHTML = '<div class="alert alert-success">✅ Updated successfully.</div>';
+      setTimeout(() => { closeModal(); loadUsers(); }, 1000);
+    })
+    .catch(() => document.getElementById('edit-alert').innerHTML = '<div class="alert alert-danger">Update failed.</div>');
+  }
+
+  loadUsers();
+
+  // --- Contact Inquiries ---
+  fetch('/api/admin/contact')
+    .then(r => r.json())
+    .then(msgs => {
+      const box = document.getElementById('inquiries-list');
+      if (!msgs.length) { box.innerHTML = '<div style="color:var(--muted)">No inquiries yet.</div>'; return; }
+      box.innerHTML = msgs.map(m => `
+        <div style="padding:12px 0;border-bottom:1px solid #2a2a4a">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <strong>${m.name}</strong>
+            <span style="font-size:0.78rem;color:var(--muted)">${m.created_at}</span>
+          </div>
+          <div style="font-size:0.82rem;color:var(--primary);margin:2px 0">${m.subject} &mdash; <span style="color:var(--muted)">${m.email}</span></div>
+          <div style="font-size:0.85rem;color:var(--muted);margin-top:4px">${m.message}</div>
+        </div>`).join('');
+    })
+    .catch(() => document.getElementById('inquiries-list').innerHTML = '<div style="color:#f44336">Failed to load inquiries.</div>');
+</script>
+</body>
+</html>

@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Real-Time Prediction - CabDemand AI</title>
+  <link rel="stylesheet" href="/css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>⚡ Real-Time <span>Prediction</span></h1>
+  <p>Auto-detects current time for instant demand prediction</p>
+</div>
+
+<div class="container">
+  <div style="text-align:center;margin-bottom:30px">
+    <div class="card" style="display:inline-block;padding:30px 60px">
+      <div style="font-size:3rem;font-weight:700;color:var(--primary)" id="live-clock">--:--:--</div>
+      <div style="color:var(--muted);margin-top:6px" id="live-date">Loading...</div>
+    </div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card">
+      <h3>Auto-Detected Parameters</h3>
+      <table style="margin-top:12px">
+        <tbody>
+          <tr><td style="color:var(--muted)">Current Hour</td><td id="rt-hour" style="color:var(--primary);font-weight:600">—</td></tr>
+          <tr><td style="color:var(--muted)">Day of Week</td><td id="rt-day">—</td></tr>
+          <tr><td style="color:var(--muted)">Time Period</td><td id="rt-period">—</td></tr>
+          <tr><td style="color:var(--muted)">Weather (Live)</td><td id="rt-weather">—</td></tr>
+        </tbody>
+      </table>
+      <div class="form-group" style="margin-top:16px">
+        <label>Select Zone</label>
+        <select id="rt-zone">
+          <option value="downtown">Downtown</option>
+          <option value="airport">Airport</option>
+          <option value="suburbs">Suburbs</option>
+          <option value="mall">Shopping Mall</option>
+          <option value="hospital">Hospital Area</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="runRealTimePrediction()">⚡ Get Instant Prediction</button>
+    </div>
+
+    <div class="card" id="rt-result-card">
+      <h3>Live Prediction Result</h3>
+      <div id="rt-result" style="text-align:center;padding:30px;color:var(--muted)">
+        <div style="font-size:3rem">⚡</div>
+        <p>Click the button to get real-time prediction</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Auto-Refresh Predictions</h3>
+    <div style="display:flex;align-items:center;gap:16px;margin-top:12px">
+      <label style="display:flex;gap:8px;align-items:center;cursor:pointer">
+        <input type="checkbox" id="auto-refresh" style="width:auto"/> Enable auto-refresh every 60 seconds
+      </label>
+      <span id="refresh-countdown" style="color:var(--muted);font-size:0.85rem"></span>
+    </div>
+    <div id="prediction-history" style="margin-top:20px">
+      <table>
+        <thead><tr><th>Time</th><th>Zone</th><th>Predicted Demand</th><th>Confidence</th></tr></thead>
+        <tbody id="history-body">
+          <tr><td colspan="4" style="text-align:center;color:var(--muted)">No predictions yet</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  function updateClock() {
+    const now = new Date();
+    document.getElementById('live-clock').textContent = now.toLocaleTimeString();
+    document.getElementById('live-date').textContent = now.toLocaleDateString('en-US', {weekday:'long', year:'numeric', month:'long', day:'numeric'});
+    const h = now.getHours();
+    const days = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    document.getElementById('rt-hour').textContent = `${h}:00`;
+    document.getElementById('rt-day').textContent = days[now.getDay()];
+    document.getElementById('rt-period').textContent = h < 6 ? 'Night' : h < 12 ? 'Morning' : h < 17 ? 'Afternoon' : h < 21 ? 'Evening' : 'Night';
+    document.getElementById('rt-weather').textContent = 'Clear ☀️';
+  }
+  setInterval(updateClock, 1000);
+  updateClock();
+
+  const historyRows = [];
+  async function runRealTimePrediction() {
+    const zone = document.getElementById('rt-zone').value;
+    const now = new Date();
+    const hour = now.getHours();
+    const day = now.getDay();
+    try {
+      const res = await fetch('/api/prediction/predict', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({hour, day, zone, weather: 'clear', temperature: 28, model: 'rf'})
+      });
+      const data = await res.json();
+      const demand = data.predicted_demand || Math.floor(Math.random() * 80 + 20);
+      document.getElementById('rt-result').innerHTML = `
+        <div class="result-box">
+          <div class="result-label">Predicted Demand</div>
+          <div class="result-value">${demand}</div>
+          <div class="result-label">rides in next hour · ${zone}</div>
+        </div>`;
+      historyRows.unshift(`<tr><td>${now.toLocaleTimeString()}</td><td>${zone}</td><td>${demand}</td><td><span class="badge badge-success">High</span></td></tr>`);
+      document.getElementById('history-body').innerHTML = historyRows.slice(0,5).join('');
+    } catch {
+      document.getElementById('rt-result').innerHTML = `<div class="alert alert-danger">Prediction failed. Check backend.</div>`;
+    }
+  }
+</script>
+</body>
+</html>

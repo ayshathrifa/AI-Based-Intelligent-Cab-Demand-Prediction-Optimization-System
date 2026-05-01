@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Peak Hour Analysis - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>⏰ Peak Hour <span>Analysis</span></h1>
+  <p>Identify morning and evening demand peaks for optimal planning</p>
+</div>
+
+<div class="container">
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card" style="border-top:4px solid var(--secondary)">
+      <h3>🌅 Morning Peak</h3>
+      <div style="font-size:2.5rem;font-weight:700;color:var(--secondary);margin:12px 0">7 AM – 9 AM</div>
+      <p style="color:var(--muted)">Highest demand during office commute hours</p>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Avg Demand</span><span style="color:var(--secondary);font-weight:600">85 rides/hr</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:85%;background:var(--secondary)"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;margin-bottom:6px"><span>Driver Utilization</span><span style="color:var(--secondary);font-weight:600">92%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:92%;background:var(--secondary)"></div></div>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid var(--primary)">
+      <h3>🌆 Evening Peak</h3>
+      <div style="font-size:2.5rem;font-weight:700;color:var(--primary);margin:12px 0">5 PM – 8 PM</div>
+      <p style="color:var(--muted)">Highest demand during return commute hours</p>
+      <div style="margin-top:16px">
+        <div style="display:flex;justify-content:space-between;margin-bottom:6px"><span>Avg Demand</span><span style="color:var(--primary);font-weight:600">94 rides/hr</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:94%"></div></div>
+        <div style="display:flex;justify-content:space-between;margin-top:12px;margin-bottom:6px"><span>Driver Utilization</span><span style="color:var(--primary);font-weight:600">97%</span></div>
+        <div class="progress-bar"><div class="progress-fill" style="width:97%"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:30px">
+    <h3>24-Hour Demand Pattern</h3>
+    <div class="chart-container" style="height:350px">
+      <canvas id="hourly-chart"></canvas>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Peak Hours Timeline</h3>
+      <div class="timeline" style="margin-top:20px">
+        <div class="timeline-item"><strong>6:00 AM</strong><p style="color:var(--muted);font-size:0.85rem">Demand starts rising — early commuters</p></div>
+        <div class="timeline-item"><strong style="color:var(--secondary)">7:00 – 9:00 AM 🔥</strong><p style="color:var(--muted);font-size:0.85rem">Morning peak — office & school rush</p></div>
+        <div class="timeline-item"><strong>12:00 PM</strong><p style="color:var(--muted);font-size:0.85rem">Moderate demand — lunch hours</p></div>
+        <div class="timeline-item"><strong style="color:var(--primary)">5:00 – 8:00 PM 🔥</strong><p style="color:var(--muted);font-size:0.85rem">Evening peak — highest demand of the day</p></div>
+        <div class="timeline-item"><strong>10:00 PM</strong><p style="color:var(--muted);font-size:0.85rem">Night demand — entertainment & late workers</p></div>
+        <div class="timeline-item"><strong>2:00 AM</strong><p style="color:var(--muted);font-size:0.85rem">Lowest demand — minimal rides</p></div>
+      </div>
+    </div>
+    <div class="card">
+      <h3>Weekday vs Weekend Peaks</h3>
+      <div class="chart-container">
+        <canvas id="peak-compare-chart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  const hours = Array.from({length:24}, (_,i) => `${i}:00`);
+  const demandData = [5,3,2,2,4,12,45,85,82,55,40,48,52,45,38,42,60,88,94,80,65,50,35,18];
+
+  new Chart(document.getElementById('hourly-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: hours,
+      datasets: [{
+        label: 'Demand (rides/hr)',
+        data: demandData,
+        borderColor: '#6c63ff',
+        backgroundColor: 'rgba(108,99,255,0.15)',
+        fill: true,
+        tension: 0.4,
+        pointBackgroundColor: demandData.map(v => v > 80 ? '#f5a623' : '#6c63ff'),
+        pointRadius: demandData.map(v => v > 80 ? 6 : 3)
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#e0e0e0'}}},
+      scales: {
+        x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+        y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}}
+      }
+    }
+  });
+
+  new Chart(document.getElementById('peak-compare-chart').getContext('2d'), {
+    type: 'bar',
+    data: {
+      labels: ['Morning\n6-9AM', 'Midday\n12-2PM', 'Evening\n5-8PM', 'Night\n10PM+'],
+      datasets: [
+        {label: 'Weekday', data: [85, 48, 94, 35], backgroundColor: 'rgba(108,99,255,0.7)', borderRadius: 6},
+        {label: 'Weekend', data: [45, 65, 78, 55], backgroundColor: 'rgba(245,166,35,0.7)', borderRadius: 6}
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {legend: {labels: {color: '#e0e0e0'}}},
+      scales: {
+        x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+        y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}}
+      }
+    }
+  });
+</script>
+</body>
+</html>

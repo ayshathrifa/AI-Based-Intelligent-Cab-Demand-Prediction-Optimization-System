@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Data Visualization - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>📊 Data <span>Visualization</span></h1>
+  <p>Interactive charts for comprehensive demand analysis</p>
+</div>
+
+<div class="container">
+  <div class="tabs">
+    <button class="tab-btn active" onclick="showTab('bar')">Bar Chart</button>
+    <button class="tab-btn" onclick="showTab('line')">Line Graph</button>
+    <button class="tab-btn" onclick="showTab('area')">Area Trends</button>
+    <button class="tab-btn" onclick="showTab('pie')">Distribution</button>
+  </div>
+
+  <div id="tab-bar" class="card" style="margin-bottom:24px">
+    <h3>Monthly Demand — Bar Chart</h3>
+    <div class="chart-container" style="height:380px"><canvas id="bar-chart"></canvas></div>
+  </div>
+  <div id="tab-line" class="card" style="display:none;margin-bottom:24px">
+    <h3>Daily Demand Trend — Line Graph</h3>
+    <div class="chart-container" style="height:380px"><canvas id="line-chart"></canvas></div>
+  </div>
+  <div id="tab-area" class="card" style="display:none;margin-bottom:24px">
+    <h3>Demand Area Trends</h3>
+    <div class="chart-container" style="height:380px"><canvas id="area-chart"></canvas></div>
+  </div>
+  <div id="tab-pie" class="card" style="display:none;margin-bottom:24px">
+    <h3>Zone Demand Distribution</h3>
+    <div class="chart-container" style="height:380px"><canvas id="pie-chart"></canvas></div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Demand by Day of Week</h3>
+      <div class="chart-container"><canvas id="dow-chart"></canvas></div>
+    </div>
+    <div class="card">
+      <h3>Hourly Demand Heatmap</h3>
+      <div id="mini-heatmap" style="display:grid;grid-template-columns:repeat(12,1fr);gap:3px;margin-top:12px"></div>
+      <div style="display:flex;justify-content:space-between;margin-top:8px;color:var(--muted);font-size:0.75rem">
+        <span>12AM</span><span>6AM</span><span>12PM</span><span>6PM</span><span>11PM</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const monthData = [1200,1350,1500,1800,2100,2400,2200,2300,2000,1900,1700,2500];
+  const days = Array.from({length:30}, (_,i) => `Day ${i+1}`);
+  const dayData = Array.from({length:30}, () => Math.floor(Math.random()*60+40));
+
+  const chartDefaults = {
+    responsive: true, maintainAspectRatio: false,
+    plugins: {legend: {labels: {color: '#e0e0e0'}}},
+    scales: {
+      x: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}},
+      y: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}}
+    }
+  };
+
+  new Chart(document.getElementById('bar-chart').getContext('2d'), {
+    type: 'bar',
+    data: {labels: months, datasets: [{label: 'Total Rides', data: monthData, backgroundColor: 'rgba(108,99,255,0.7)', borderColor: '#6c63ff', borderWidth: 2, borderRadius: 6}]},
+    options: chartDefaults
+  });
+
+  new Chart(document.getElementById('line-chart').getContext('2d'), {
+    type: 'line',
+    data: {labels: days, datasets: [{label: 'Daily Demand', data: dayData, borderColor: '#f5a623', backgroundColor: 'rgba(245,166,35,0.1)', fill: false, tension: 0.4}]},
+    options: chartDefaults
+  });
+
+  new Chart(document.getElementById('area-chart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: months,
+      datasets: [
+        {label: 'Downtown', data: [400,450,500,600,700,800,750,780,680,640,580,850], borderColor: '#6c63ff', backgroundColor: 'rgba(108,99,255,0.2)', fill: true, tension: 0.4},
+        {label: 'Airport', data: [300,320,380,420,500,550,520,540,490,460,420,600], borderColor: '#f5a623', backgroundColor: 'rgba(245,166,35,0.15)', fill: true, tension: 0.4},
+        {label: 'Suburbs', data: [200,230,250,300,350,400,380,400,360,340,300,420], borderColor: '#4caf50', backgroundColor: 'rgba(76,175,80,0.1)', fill: true, tension: 0.4}
+      ]
+    },
+    options: chartDefaults
+  });
+
+  new Chart(document.getElementById('pie-chart').getContext('2d'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Downtown','Airport','Suburbs','Mall','Hospital','University','Others'],
+      datasets: [{data: [28,18,12,15,10,9,8], backgroundColor: ['#6c63ff','#f5a623','#4caf50','#a855f7','#f44336','#00bcd4','#607d8b']}]
+    },
+    options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {labels: {color: '#e0e0e0'}}}}
+  });
+
+  new Chart(document.getElementById('dow-chart').getContext('2d'), {
+    type: 'radar',
+    data: {
+      labels: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+      datasets: [{label: 'Avg Demand', data: [65,68,70,72,85,92,88], borderColor: '#6c63ff', backgroundColor: 'rgba(108,99,255,0.2)', pointBackgroundColor: '#6c63ff'}]
+    },
+    options: {responsive: true, maintainAspectRatio: false, plugins: {legend: {labels: {color: '#e0e0e0'}}}, scales: {r: {ticks: {color: '#a0a0b0'}, grid: {color: '#2a2a4a'}, pointLabels: {color: '#e0e0e0'}}}}
+  });
+
+  const hourlyVals = [5,3,2,2,4,12,45,85,82,55,40,48,52,45,38,42,60,88,94,80,65,50,35,18];
+  const mini = document.getElementById('mini-heatmap');
+  hourlyVals.forEach(v => {
+    const cell = document.createElement('div');
+    const intensity = v / 100;
+    cell.style.cssText = `height:40px;border-radius:4px;background:rgba(108,99,255,${0.1 + intensity * 0.9});title="${v} rides"`;
+    cell.title = `${v} rides/hr`;
+    mini.appendChild(cell);
+  });
+
+  function showTab(tab) {
+    ['bar','line','area','pie'].forEach(t => {
+      document.getElementById(`tab-${t}`).style.display = t === tab ? 'block' : 'none';
+    });
+    document.querySelectorAll('.tab-btn').forEach((btn, i) => {
+      btn.classList.toggle('active', ['bar','line','area','pie'][i] === tab);
+    });
+  }
+</script>
+</body>
+</html>

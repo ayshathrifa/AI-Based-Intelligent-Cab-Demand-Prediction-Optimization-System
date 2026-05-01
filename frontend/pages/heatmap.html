@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Demand Heatmap - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>🔥 Demand <span>Heatmap</span></h1>
+  <p>Visual demand intensity across all city locations</p>
+</div>
+
+<div class="container">
+  <div style="display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap">
+    <select id="heatmap-hour" style="padding:10px 14px;background:var(--darker);border:1px solid #333;border-radius:8px;color:var(--text)">
+      <option value="">All Hours</option>
+      <option value="7">7 AM (Morning Peak)</option>
+      <option value="9">9 AM</option>
+      <option value="12">12 PM (Noon)</option>
+      <option value="17">5 PM (Evening Peak)</option>
+      <option value="20">8 PM</option>
+      <option value="23">11 PM (Night)</option>
+    </select>
+    <button class="btn btn-primary" onclick="renderHeatmap()">Update Heatmap</button>
+  </div>
+
+  <div class="card" style="margin-bottom:24px">
+    <h3 style="margin-bottom:16px">City Demand Grid</h3>
+    <div style="overflow-x:auto">
+      <div style="display:grid;grid-template-columns:80px repeat(8,1fr);gap:4px;min-width:600px;max-width:100%;font-size:0.75rem" id="heatmap-container">
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center;margin-top:16px;flex-wrap:wrap">
+      <span style="color:var(--muted);font-size:0.85rem">Low</span>
+      <div style="display:flex;gap:2px">
+        <div style="width:24px;height:16px;border-radius:3px;background:#1a3a1a"></div>
+        <div style="width:24px;height:16px;border-radius:3px;background:#2d6a2d"></div>
+        <div style="width:24px;height:16px;border-radius:3px;background:#f5a623"></div>
+        <div style="width:24px;height:16px;border-radius:3px;background:#e05c00"></div>
+        <div style="width:24px;height:16px;border-radius:3px;background:#c0392b"></div>
+      </div>
+      <span style="color:var(--muted);font-size:0.85rem">High</span>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>Hotspot Zones</h3>
+      <div id="hotspot-list" style="margin-top:12px"></div>
+    </div>
+    <div class="card">
+      <h3>Heatmap Stats</h3>
+      <table style="margin-top:12px">
+        <tbody>
+          <tr><td style="color:var(--muted)">Highest Demand Zone</td><td style="color:var(--danger);font-weight:600">Railway Station</td></tr>
+          <tr><td style="color:var(--muted)">Lowest Demand Zone</td><td style="color:var(--success)">Old City</td></tr>
+          <tr><td style="color:var(--muted)">Average Demand</td><td>52 rides/hr</td></tr>
+          <tr><td style="color:var(--muted)">Peak Time</td><td style="color:var(--secondary)">5:00 PM - 7:00 PM</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script src="../js/heatmap.js"></script>
+</body>
+</html>

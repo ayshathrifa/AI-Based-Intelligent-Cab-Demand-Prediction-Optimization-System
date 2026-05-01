@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>About - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+    <li><a href="about.html">About</a></li>
+    <li><a href="contact.html">Contact</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>About <span>CabDemand AI</span></h1>
+  <p>Machine learning powered cab demand forecasting system</p>
+</div>
+
+<div class="container">
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card">
+      <h3>🎯 Project Overview</h3>
+      <p style="color:var(--muted);line-height:1.7;margin-top:12px">
+        CabDemand AI is an intelligent cab demand forecasting system that uses machine learning to predict ride demand across city zones. It helps cab operators optimize driver allocation, reduce wait times, and maximize revenue by predicting demand before it happens.
+      </p>
+    </div>
+    <div class="card">
+      <h3>🛠️ Technology Stack</h3>
+      <div style="margin-top:12px">
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="badge badge-success">Python / Flask</span>
+          <span class="badge badge-success">Scikit-learn</span>
+          <span class="badge badge-success">Random Forest</span>
+          <span class="badge badge-success">Linear Regression</span>
+          <span class="badge badge-warning">HTML / CSS / JS</span>
+          <span class="badge badge-warning">Chart.js</span>
+          <span class="badge badge-warning">SQLite</span>
+          <span class="badge badge-warning">REST API</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid-3" style="margin-bottom:30px">
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:12px">🤖</div>
+      <h3>ML Models</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:8px">Random Forest & Linear Regression trained on real cab demand data</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:12px">📊</div>
+      <h3>Data-Driven</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:8px">Predictions based on time, location, weather, and historical patterns</p>
+    </div>
+    <div class="card" style="text-align:center">
+      <div style="font-size:2.5rem;margin-bottom:12px">⚡</div>
+      <h3>Real-Time</h3>
+      <p style="color:var(--muted);font-size:0.9rem;margin-top:8px">Instant predictions with auto-detected time and location parameters</p>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>📋 Features Summary</h3>
+    <div class="grid-2" style="margin-top:16px">
+      <ul style="color:var(--muted);line-height:2;list-style:none">
+        <li>✅ Demand prediction with ML</li>
+        <li>✅ Real-time auto prediction</li>
+        <li>✅ Zone-based demand analysis</li>
+        <li>✅ Interactive demand heatmap</li>
+        <li>✅ Driver allocation suggestions</li>
+      </ul>
+      <ul style="color:var(--muted);line-height:2;list-style:none">
+        <li>✅ Peak hour analysis</li>
+        <li>✅ AI-powered insights</li>
+        <li>✅ Data visualization charts</li>
+        <li>✅ Admin panel with model training</li>
+        <li>✅ Model comparison (RF vs LR)</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI. Built with ❤️ using Python & Machine Learning.</p></footer>
+</body>
+</html>

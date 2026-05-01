@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Dashboard - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+</head>
+<body>
+<nav>
+  <a href="#" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="driver-dashboard.html">My Dashboard</a></li>
+  </ul>
+  <div class="nav-right">
+    <span id="driver-name" style="color:var(--muted);font-size:0.9rem"></span>
+    <div style="position:relative;display:inline-block">
+      <button id="notif-btn" onclick="toggleNotifications()" style="background:var(--card);border:1px solid #333;border-radius:8px;padding:8px 14px;cursor:pointer;color:var(--text);font-size:0.9rem">
+        🔔
+      </button>
+      <span id="notif-badge" style="display:none;position:absolute;top:-6px;right:-6px;background:#f44336;color:#fff;border-radius:50%;width:18px;height:18px;font-size:0.7rem;font-weight:700;text-align:center;line-height:18px">0</span>
+    </div>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem">Logout</a>
+  </div>
+</nav>
+
+<!-- Notifications Panel -->
+<div id="notif-panel" style="display:none;position:fixed;top:70px;right:20px;width:340px;background:var(--card);border-radius:var(--radius);box-shadow:var(--shadow);z-index:500;padding:20px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+    <h3 style="font-size:1rem">🔔 Notifications</h3>
+    <button onclick="markAllRead()" style="background:none;border:none;color:var(--primary);cursor:pointer;font-size:0.82rem">Mark all read</button>
+  </div>
+  <div id="notif-list" style="max-height:300px;overflow-y:auto;font-size:0.85rem">
+    <div style="color:var(--muted)">Loading...</div>
+  </div>
+</div>
+
+<div class="page-header">
+  <h1>🚗 Driver <span>Dashboard</span></h1>
+  <p id="welcome-msg">Welcome back!</p>
+</div>
+
+<div class="container">
+  <div id="alert-box"></div>
+
+  <div class="grid-4" style="margin-bottom:30px">
+    <div class="stat-card">
+      <div class="value" id="stat-zone">—</div>
+      <div class="label">Assigned Zone</div>
+    </div>
+    <div class="stat-card" style="border-color:#4caf50">
+      <div class="value" style="color:#4caf50" id="stat-status">—</div>
+      <div class="label">My Status</div>
+    </div>
+    <div class="stat-card" style="border-color:#f5a623">
+      <div class="value" style="color:#f5a623" id="stat-rides">—</div>
+      <div class="label">Rides Today</div>
+    </div>
+    <div class="stat-card" style="border-color:#a855f7">
+      <div class="value" style="color:#a855f7" id="stat-demand">—</div>
+      <div class="label">Zone Demand Now</div>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="card">
+      <h3>📍 Your Zone Info</h3>
+      <p style="color:var(--muted);font-size:0.85rem;margin:8px 0 20px">Current demand forecast for your assigned zone</p>
+      <div style="background:var(--darker);border-radius:10px;padding:20px;text-align:center">
+        <div style="font-size:3rem;font-weight:700;color:var(--secondary)" id="zone-demand-big">—</div>
+        <div style="color:var(--muted);margin-top:6px">Predicted rides/hr in <span id="zone-name-label" style="color:var(--primary)">—</span></div>
+      </div>
+      <div style="margin-top:16px;padding:12px;background:rgba(108,99,255,0.1);border-radius:8px;font-size:0.85rem;color:var(--muted)" id="demand-tip">
+        Loading demand tip...
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>⚙️ Update My Status</h3>
+      <p style="color:var(--muted);font-size:0.85rem;margin:8px 0 20px">Let the system know your availability</p>
+      <div class="form-group">
+        <label>Current Status</label>
+        <select id="status-select">
+          <option value="Active">🟢 Active — Available for rides</option>
+          <option value="Idle">🟡 Idle — Taking a break</option>
+          <option value="Offline">🔴 Offline — Not available</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" style="width:100%" onclick="updateStatus()">Update Status</button>
+      <div id="status-alert" style="margin-top:12px"></div>
+
+      <div style="margin-top:24px;border-top:1px solid #2a2a4a;padding-top:20px">
+        <h3 style="margin-bottom:12px">ℹ️ Account Info</h3>
+        <div style="font-size:0.9rem;color:var(--muted);display:flex;flex-direction:column;gap:8px">
+          <div>👤 Name: <span id="info-name" style="color:var(--text)">—</span></div>
+          <div>📧 Email: <span id="info-email" style="color:var(--text)">—</span></div>
+          <div>🕐 Current Hour: <span id="info-hour" style="color:var(--text)">—</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script>
+  const userId = localStorage.getItem('user_id');
+  const role   = localStorage.getItem('role');
+
+  if (!userId || userId === 'null' || role !== 'driver') {
+    window.location.href = 'login.html';
+  }
+
+  document.getElementById('driver-name').textContent = localStorage.getItem('name') || '';
+
+  document.getElementById('nav-logout').addEventListener('click', function(e) {
+    e.preventDefault();
+    ['token','role','name','user_id'].forEach(k => localStorage.removeItem(k));
+    window.location.href = 'login.html';
+  });
+
+  // ── Profile ──────────────────────────────────────────────
+  function loadProfile() {
+    fetch('/api/driver/profile/' + userId)
+      .then(function(r) { return r.json(); })
+      .then(function(d) {
+        if (d.message) {
+          document.getElementById('alert-box').innerHTML = '<div class="alert alert-danger">❌ ' + d.message + '</div>';
+          return;
+        }
+        document.getElementById('welcome-msg').textContent   = 'Welcome back, ' + d.name + '!';
+        document.getElementById('stat-zone').textContent     = d.zone.charAt(0).toUpperCase() + d.zone.slice(1);
+        document.getElementById('stat-status').textContent   = d.status;
+        document.getElementById('stat-rides').textContent    = d.rides_today;
+        document.getElementById('stat-demand').textContent   = d.zone_demand;
+        document.getElementById('zone-demand-big').textContent = d.zone_demand;
+        document.getElementById('zone-name-label').textContent = d.zone;
+        document.getElementById('status-select').value       = d.status;
+        document.getElementById('info-name').textContent     = d.name;
+        document.getElementById('info-email').textContent    = d.email;
+        document.getElementById('info-hour').textContent     = d.current_hour + ':00';
+
+        if (d.unread_notifications > 0) {
+          var badge = document.getElementById('notif-badge');
+          badge.textContent   = d.unread_notifications;
+          badge.style.display = 'block';
+        } else {
+          document.getElementById('notif-badge').style.display = 'none';
+        }
+
+        var tip = d.zone_demand > 60
+          ? '🔥 High demand in your zone — stay active!'
+          : d.zone_demand > 30
+          ? '📈 Moderate demand — good time to be available.'
+          : '😴 Low demand right now. Consider switching zones.';
+        document.getElementById('demand-tip').textContent = tip;
+      })
+      .catch(function(err) {
+        document.getElementById('alert-box').innerHTML =
+          '<div class="alert alert-danger">❌ Cannot reach server. Make sure backend is running on port 5000. (' + err.message + ')</div>';
+      });
+  }
+
+  // ── Notifications ─────────────────────────────────────────
+  function toggleNotifications() {
+    var panel  = document.getElementById('notif-panel');
+    var isOpen = panel.style.display === 'block';
+    panel.style.display = isOpen ? 'none' : 'block';
+    if (!isOpen) loadNotifications();
+  }
+
+  function loadNotifications() {
+    fetch('/api/driver/notifications/' + userId)
+      .then(function(r) { return r.json(); })
+      .then(function(notifs) {
+        var box = document.getElementById('notif-list');
+        if (!notifs.length) {
+          box.innerHTML = '<div style="color:var(--muted)">No notifications yet.</div>';
+          return;
+        }
+        box.innerHTML = notifs.map(function(n) {
+          return '<div style="padding:10px;border-bottom:1px solid #2a2a4a;border-radius:6px;margin-bottom:4px;background:' + (n.is_read ? 'transparent' : 'rgba(108,99,255,0.1)') + '">'
+            + '<div style="color:' + (n.is_read ? 'var(--muted)' : 'var(--text)') + '">' + n.message + '</div>'
+            + '<div style="font-size:0.75rem;color:var(--muted);margin-top:4px">' + n.created_at + '</div>'
+            + '</div>';
+        }).join('');
+      })
+      .catch(function() {
+        document.getElementById('notif-list').innerHTML = '<div style="color:#f44336">Failed to load notifications.</div>';
+      });
+  }
+
+  function markAllRead() {
+    var badge = document.getElementById('notif-badge');
+    fetch('/api/driver/notifications/' + userId + '/read', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      badge.style.display = 'none';
+      badge.textContent = '0';
+      loadNotifications();
+    })
+    .catch(function() {
+      document.getElementById('notif-list').innerHTML = '<div style="color:#f44336">Failed to mark as read.</div>';
+    });
+  }
+
+  // ── Status update ─────────────────────────────────────────
+  function updateStatus() {
+    var status = document.getElementById('status-select').value;
+    fetch('/api/driver/profile/' + userId + '/status', {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ status: status })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function() {
+      document.getElementById('status-alert').innerHTML = '<div class="alert alert-success">✅ Status updated!</div>';
+      document.getElementById('stat-status').textContent = status;
+      setTimeout(function() { document.getElementById('status-alert').innerHTML = ''; }, 2000);
+    })
+    .catch(function() {
+      document.getElementById('status-alert').innerHTML = '<div class="alert alert-danger">Update failed.</div>';
+    });
+  }
+
+  loadProfile();
+</script>
+</body>
+</html>

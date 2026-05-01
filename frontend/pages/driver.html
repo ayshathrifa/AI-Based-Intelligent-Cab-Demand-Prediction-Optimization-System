@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Driver Allocation - CabDemand AI</title>
+  <link rel="stylesheet" href="../css/styles.css"/>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+<nav>
+  <a href="/" class="logo">🚕 CabDemand AI</a>
+  <ul>
+    <li><a href="dashboard.html">Dashboard</a></li>
+    <li class="user-only"><a href="prediction.html">Predict</a></li>
+    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="zones.html">Zones</a></li>
+    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="driver.html">Drivers</a></li>
+    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="insights.html">Insights</a></li>
+  </ul>
+  <div class="nav-right">
+    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
+  </div>
+</nav>
+<script src="../js/auth.js"></script>
+
+<div class="page-header">
+  <h1>🚗 Driver <span>Allocation</span></h1>
+  <p>AI-powered driver deployment suggestions based on demand forecasts</p>
+</div>
+
+<div class="container">
+  <div class="grid-4" style="margin-bottom:30px">
+    <div class="stat-card"><div class="value">42</div><div class="label">Total Drivers</div></div>
+    <div class="stat-card" style="border-color:#4caf50"><div class="value" style="color:#4caf50">31</div><div class="label">Active</div></div>
+    <div class="stat-card" style="border-color:#f5a623"><div class="value" style="color:#f5a623">8</div><div class="label">Idle</div></div>
+    <div class="stat-card" style="border-color:#f44336"><div class="value" style="color:#f44336">3</div><div class="label">Offline</div></div>
+  </div>
+
+  <div class="grid-2" style="margin-bottom:30px">
+    <div class="card">
+      <h3>🎯 AI Allocation Suggestions</h3>
+      <p style="color:var(--muted);font-size:0.85rem;margin:8px 0 16px">Based on current demand predictions</p>
+      <div id="suggestions-list"></div>
+      <button class="btn btn-primary" style="width:100%;margin-top:16px" onclick="applyAllocation()">Apply All Suggestions</button>
+    </div>
+    <div class="card">
+      <h3>Driver Distribution</h3>
+      <div class="chart-container">
+        <canvas id="driver-chart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Driver List</h3>
+    <table style="margin-top:12px">
+      <thead>
+        <tr><th>Driver</th><th>Current Zone</th><th>Status</th><th>Rides Today</th><th>Action</th></tr>
+      </thead>
+      <tbody id="driver-table"></tbody>
+    </table>
+  </div>
+</div>
+
+<footer><p>© 2026 CabDemand AI</p></footer>
+<script src="../js/driver.js"></script>
+</body>
+</html>

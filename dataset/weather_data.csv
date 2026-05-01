@@ -1,0 +1,17 @@
+timestamp,condition,temperature,humidity,wind_speed,description
+2024-01-01 00:00,clear,22,60,10,Clear sky
+2024-01-01 06:00,clear,24,58,12,Clear sky
+2024-01-01 12:00,clear,31,45,15,Sunny
+2024-01-01 18:00,cloudy,28,65,18,Partly cloudy
+2024-01-02 00:00,cloudy,21,70,14,Overcast
+2024-01-02 06:00,rain,19,85,20,Light rain
+2024-01-02 12:00,rain,18,90,22,Moderate rain
+2024-01-02 18:00,heavy_rain,17,95,28,Heavy rain
+2024-01-03 00:00,fog,16,92,5,Dense fog
+2024-01-03 06:00,fog,17,88,6,Foggy
+2024-01-03 12:00,cloudy,22,75,12,Cloudy
+2024-01-03 18:00,clear,25,62,14,Clear
+2024-01-06 00:00,clear,20,55,10,Clear sky
+2024-01-06 12:00,rain,18,88,25,Rainy
+2024-01-06 18:00,heavy_rain,16,96,30,Heavy rain
+2024-01-07 12:00,clear,28,50,12,Sunny
