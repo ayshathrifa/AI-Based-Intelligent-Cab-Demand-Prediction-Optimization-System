@@ -1,12 +1,12 @@
 import sys, os
 
-# Always resolve paths relative to this file's location
-BASE_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
-PAGES_DIR = os.path.join(FRONTEND_DIR, "pages")
-CSS_DIR = os.path.join(FRONTEND_DIR, "css")
-JS_DIR = os.path.join(FRONTEND_DIR, "js")
+# __file__ = /opt/render/project/src/backend/app.py  (on Render)
+BACKEND_DIR  = os.path.dirname(os.path.abspath(__file__))
+PROJECT_DIR  = os.path.dirname(BACKEND_DIR)
+FRONTEND_DIR = os.path.join(PROJECT_DIR, 'frontend')
+PAGES_DIR    = os.path.join(FRONTEND_DIR, 'pages')
+CSS_DIR      = os.path.join(FRONTEND_DIR, 'css')
+JS_DIR       = os.path.join(FRONTEND_DIR, 'js')
 
 sys.path.insert(0, BACKEND_DIR)
 
@@ -45,13 +45,13 @@ app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 @app.route('/debug')
 def debug():
     return jsonify({
-        'backend_dir':    BACKEND_DIR,
-        'project_dir':    PROJECT_DIR,
-        'frontend_dir':   FRONTEND_DIR,
-        'pages_exists':   os.path.exists(PAGES_DIR),
-        'index_exists':   os.path.exists(os.path.join(PAGES_DIR, 'index.html')),
-        'cwd':            os.getcwd(),
-        'pages_files':    os.listdir(PAGES_DIR) if os.path.exists(PAGES_DIR) else []
+        'backend_dir':  BACKEND_DIR,
+        'project_dir':  PROJECT_DIR,
+        'frontend_dir': FRONTEND_DIR,
+        'pages_exists': os.path.exists(PAGES_DIR),
+        'index_exists': os.path.exists(os.path.join(PAGES_DIR, 'index.html')),
+        'cwd':          os.getcwd(),
+        'pages_files':  os.listdir(PAGES_DIR) if os.path.exists(PAGES_DIR) else []
     })
 
 @app.route('/')
