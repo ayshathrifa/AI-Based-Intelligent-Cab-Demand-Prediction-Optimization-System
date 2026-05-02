@@ -1,7 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, send_from_directory, render_template
+from flask import Flask, render_template, send_from_directory
 from flask_cors import CORS
 from config import Config
 from database.db import init_db
@@ -16,12 +16,11 @@ from routes.train import train_bp
 from routes.insights import insights_bp
 from routes.admin import admin_bp
 
-BASE_DIR     = os.path.dirname(os.path.abspath(__file__))
-PAGES_DIR    = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend', 'pages'))
-CSS_DIR      = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend', 'css'))
-JS_DIR       = os.path.abspath(os.path.join(BASE_DIR, '..', 'frontend', 'js'))
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+CSS_DIR  = os.path.join(BASE_DIR, 'frontend', 'css')
+JS_DIR   = os.path.join(BASE_DIR, 'frontend', 'js')
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder='frontend/templates')
 app.config.from_object(Config)
 CORS(app)
 
@@ -38,17 +37,86 @@ app.register_blueprint(train_bp,      url_prefix='/api/train')
 app.register_blueprint(insights_bp,   url_prefix='/api/insights')
 app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 
-@app.route("/")
-def home():
-    return render_template('index.html')
-
 @app.route('/')
 def index():
-    return send_from_directory(PAGES_DIR, 'index.html')
+    return render_template('index.html')
+
+@app.route("/")
+def home():
+    return render_template("index.html")
+
+@app.route("/dashboard")
+def dashboard():
+    return render_template("dashboard.html")
+
+@app.route("/prediction")
+def prediction():
+    return render_template("prediction.html")
+
+@app.route("/realtime")
+def realtime():
+    return render_template("realtime.html")
+
+@app.route("/zones")
+def zones():
+    return render_template("zones.html")
+
+@app.route("/heatmap")
+def heatmap():
+    return render_template("heatmap.html")
+
+@app.route("/driver")
+def driver():
+    return render_template("driver.html")
+
+@app.route("/driver-dashboard")
+def driver_dashboard():
+    return render_template("driver-dashboard.html")
+
+@app.route("/compare")
+def compare():
+    return render_template("compare.html")
+
+@app.route("/insights")
+def insights():
+    return render_template("insights.html")
+
+@app.route("/train")
+def train():
+    return render_template("train.html")
+
+@app.route("/upload")
+def upload():
+    return render_template("upload.html")
+
+@app.route("/visualization")
+def visualization():
+    return render_template("visualization.html")
+
+@app.route("/login")
+def login():
+    return render_template("login.html")
+
+@app.route("/signup")
+def signup():
+    return render_template("signup.html")
+
+@app.route("/peak")
+def peak():
+    return render_template("peak.html")
+
+@app.route("/contact")
+def contact():
+    return render_template("contact.html")
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
 
 @app.route('/pages/<path:filename>')
 def pages(filename):
-    return send_from_directory(PAGES_DIR, filename)
+    return render_template(filename)
 
 @app.route('/css/<path:filename>')
 def css(filename):
@@ -59,5 +127,4 @@ def js(filename):
     return send_from_directory(JS_DIR, filename)
 
 if __name__ == '__main__':
-    init_db()
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+    app.run(debug=True, host='0.0.0.0', port=5001)

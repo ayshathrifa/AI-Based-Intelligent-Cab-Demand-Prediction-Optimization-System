@@ -1,34 +1,34 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Peak Hour Analysis - CabDemand AI</title>
-  <link rel="stylesheet" href="../css/styles.css"/>
+  <link rel="stylesheet" href="/css/styles.css"/>
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
 <nav>
   <a href="/" class="logo">🚕 CabDemand AI</a>
   <ul>
-    <li><a href="dashboard.html">Dashboard</a></li>
-    <li class="user-only"><a href="prediction.html">Predict</a></li>
-    <li class="user-only"><a href="realtime.html">Real-Time</a></li>
-    <li class="user-only"><a href="zones.html">Zones</a></li>
-    <li class="user-only"><a href="heatmap.html">Heatmap</a></li>
-    <li class="user-only"><a href="driver.html">Drivers</a></li>
-    <li class="user-only"><a href="peak.html">Peak Hours</a></li>
-    <li class="user-only"><a href="insights.html">Insights</a></li>
-    <li><a href="about.html">About</a></li>
-    <li><a href="contact.html">Contact</a></li>
+     <li><a href="{{ url_for('peak') }}">Peak Hours</a></li>
+    <li class="user-only"><a href="/pages/prediction.html">Predict</a></li>
+    <li class="user-only"><a href="/pages/realtime.html">Real-Time</a></li>
+    <li class="user-only"><a href="/pages/zones.html">Zones</a></li>
+    <li class="user-only"><a href="/pages/heatmap.html">Heatmap</a></li>
+    <li class="user-only"><a href="/pages/driver.html">Drivers</a></li>
+    <li class="user-only"><a href="/pages/peak.html">Peak Hours</a></li>
+    <li class="user-only"><a href="/pages/insights.html">Insights</a></li>
+    <li><a href="/pages/about.html">About</a></li>
+    <li><a href="/pages/contact.html">Contact</a></li>
   </ul>
   <div class="nav-right">
-    <a href="admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
-    <a href="login.html" class="btn btn-outline" id="nav-login">Login</a>
+    <a href="/pages/admin.html" class="btn btn-outline" id="nav-admin">Admin</a>
+    <a href="/pages/login.html" class="btn btn-outline" id="nav-login">Login</a>
     <a href="#" class="btn btn-danger" id="nav-logout" style="font-size:0.85rem;display:none">Logout</a>
   </div>
 </nav>
-<script src="../js/auth.js"></script>
+<script src="/js/auth.js"></script>
 
 <div class="page-header">
   <h1>⏰ Peak Hour <span>Analysis</span></h1>
@@ -140,3 +140,4 @@
 </script>
 </body>
 </html>
+
