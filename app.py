@@ -1,7 +1,7 @@
 import sys, os
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
-from flask import Flask, send_from_directory
+from flask import Flask, send_from_directory, render_template
 from flask_cors import CORS
 from config import Config
 from database.db import init_db
@@ -40,7 +40,7 @@ app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 
 @app.route("/")
 def home():
-    return "Backend is running"
+    return render_template("index.html")
 
 @app.route('/')
 def index():
