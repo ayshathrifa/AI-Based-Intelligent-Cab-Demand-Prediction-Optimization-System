@@ -40,7 +40,7 @@ app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 
 @app.route("/")
 def home():
-    return "APP IS RUNNING"
+    return render_template('index.html')
 
 @app.route('/')
 def index():
