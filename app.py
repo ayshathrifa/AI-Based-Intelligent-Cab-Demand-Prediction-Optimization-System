@@ -38,6 +38,10 @@ app.register_blueprint(train_bp,      url_prefix='/api/train')
 app.register_blueprint(insights_bp,   url_prefix='/api/insights')
 app.register_blueprint(admin_bp,      url_prefix='/api/admin')
 
+@app.route("/")
+def home():
+    return "Backend is running"
+
 @app.route('/')
 def index():
     return send_from_directory(PAGES_DIR, 'index.html')
