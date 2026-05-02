@@ -4,7 +4,4 @@ scikit-learn>=1.4.2
 pandas>=2.2.0
 numpy>=1.26.4
 requests==2.31.0
-<<<<<<< HEAD
 gunicorn==21.2.0
-=======
->>>>>>> 5e25806960e6adbe1f32af380c106729b1393daf
