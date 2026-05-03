@@ -73,5 +73,13 @@ def init_db():
             created_at TEXT DEFAULT CURRENT_TIMESTAMP
         );
     ''')
+    
+    # Enforce single admin user
+    c.execute("SELECT id FROM users WHERE email = 'rifa26@gmail.com'")
+    if not c.fetchone():
+        import hashlib
+        hashed_pwd = hashlib.sha256('rifa@123'.encode()).hexdigest()
+        c.execute("INSERT INTO users (name, email, password, role) VALUES ('System Admin', 'rifa26@gmail.com', ?, 'admin')", (hashed_pwd,))
+
     conn.commit()
     conn.close()
