@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
@@ -63,22 +63,63 @@
 
 <footer><p>© 2026 CabDemand AI</p></footer>
 <script>
-  const zones = [
-    {name:'Downtown', demand:87, trend:'↑', color:'#6c63ff'},
-    {name:'Airport', demand:72, trend:'↑', color:'#f5a623'},
-    {name:'Suburbs', demand:34, trend:'↓', color:'#4caf50'},
-    {name:'Shopping Mall', demand:65, trend:'↑', color:'#a855f7'},
-    {name:'Hospital Area', demand:48, trend:'→', color:'#f44336'},
-    {name:'University', demand:55, trend:'↑', color:'#00bcd4'},
-    {name:'Railway Station', demand:91, trend:'↑', color:'#ff9800'},
-    {name:'Business Park', demand:43, trend:'↓', color:'#e91e63'},
-    {name:'Old City', demand:29, trend:'↓', color:'#607d8b'}
-  ];
+  const zoneMeta = {
+    'downtown': {name: 'Downtown', color: '#6c63ff'},
+    'airport': {name: 'Airport', color: '#f5a623'},
+    'suburbs': {name: 'Suburbs', color: '#4caf50'},
+    'mall': {name: 'Shopping Mall', color: '#a855f7'},
+    'hospital': {name: 'Hospital Area', color: '#f44336'},
+    'university': {name: 'University', color: '#00bcd4'},
+    'station': {name: 'Railway Station', color: '#ff9800'},
+    'business_park': {name: 'Business Park', color: '#e91e63'},
+    'old_city': {name: 'Old City', color: '#607d8b'}
+  };
 
-  function loadZones() {
+  async function loadZones() {
+    const timeFilter = document.getElementById('time-filter').value;
+    const dayFilter = document.getElementById('day-filter').value;
+
+    let hour = new Date().getHours();
+    if (timeFilter === 'morning') hour = 8;
+    else if (timeFilter === 'evening') hour = 18;
+    else if (timeFilter === 'night') hour = 23;
+
+    let day = new Date().getDay();
+    if (dayFilter === 'weekday') day = 2; // Tuesday
+    else if (dayFilter === 'weekend') day = 6; // Saturday
+
+    try {
+      const btn = document.querySelector('button[onclick="loadZones()"]');
+      if(btn) btn.textContent = 'Loading...';
+
+      const res = await fetch(`/api/zones/?hour=${hour}&day=${day}`);
+      const data = await res.json();
+      
+      const formattedZones = data.map(z => {
+        const meta = zoneMeta[z.zone] || {name: z.zone, color: '#ccc'};
+        return {
+          id: z.zone,
+          name: meta.name,
+          demand: z.demand,
+          trend: z.demand > 60 ? '↑' : z.demand < 40 ? '↓' : '→',
+          color: meta.color
+        };
+      });
+
+      renderZones(formattedZones);
+      if(btn) btn.textContent = 'Apply Filter';
+    } catch (e) {
+      console.error(e);
+      alert('Failed to load zones data. Check backend connection.');
+      const btn = document.querySelector('button[onclick="loadZones()"]');
+      if(btn) btn.textContent = 'Apply Filter';
+    }
+  }
+
+  function renderZones(zones) {
     const grid = document.getElementById('zones-grid');
     grid.innerHTML = zones.map(z => `
-      <div class="zone-card" onclick="selectZone('${z.name}')">
+      <div class="zone-card" onclick="selectZone('${z.id}')">
         <div style="display:flex;justify-content:space-between;align-items:center">
           <h3>${z.name}</h3>
           <span style="font-size:1.2rem">${z.trend}</span>
@@ -86,7 +127,7 @@
         <div class="zone-demand" style="color:${z.color}">${z.demand}</div>
         <div style="color:var(--muted);font-size:0.85rem">rides/hour</div>
         <div class="progress-bar" style="margin-top:12px">
-          <div class="progress-fill" style="width:${z.demand}%;background:${z.color}"></div>
+          <div class="progress-fill" style="width:${Math.min(z.demand, 100)}%;background:${z.color}"></div>
         </div>
       </div>`).join('');
 
@@ -116,8 +157,8 @@
     });
   }
 
-  function selectZone(name) {
-    window.location.href = `prediction.html?zone=${encodeURIComponent(name)}`;
+  function selectZone(id) {
+    window.location.href = `prediction.html?zone=${encodeURIComponent(id)}`;
   }
 
   loadZones();
