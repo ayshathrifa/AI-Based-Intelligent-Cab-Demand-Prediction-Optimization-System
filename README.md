@@ -82,6 +82,60 @@ cab-demand-project/
 
 ---
 
+## 🔄 System Workflow
+
+
+```mermaid
+graph TD
+    %% 1. Data Collection & Ingestion
+    subgraph Data Layer
+        A[Admin Uploads CSV Dataset] --> B[(SQLite Database)]
+        B --> C[Data Preprocessing & Cleaning]
+    end
+
+    %% 2. Data Preprocessing & Model Training
+    subgraph Machine Learning Layer
+        C --> D[Model Training<br>Random Forest / Linear Regression]
+        D --> E{Model Evaluation<br>Accuracy, R², MAE}
+        E -->|Select Best Model| F[Trained ML Model]
+    end
+
+    %% 3. Demand Prediction (Core Engine)
+    subgraph Prediction Engine
+        G[Manual Input<br>Hour, Day, Zone, Weather] --> I
+        H[Real-Time Detection<br>Current Time/Conditions] --> I
+        I(Prediction Request) --> F
+        F --> J[Predicted Cab Demand]
+    end
+
+    %% 4. Analysis & Insights
+    subgraph Analysis & Insights
+        J --> K[Zone & Peak Analysis]
+        J --> L[Demand Heatmap Generation]
+        J --> M[AI Demand Insights]
+    end
+
+    %% 5. Driver Allocation & Optimization
+    subgraph Driver Optimization
+        K --> N[AI Driver Allocation Suggestions]
+        N --> O[Admin Reviews & Dispatches]
+        O --> P[Live Notifications to Drivers Dashboard]
+    end
+
+    %% 6. Visualization & Monitoring
+    subgraph Dashboard & Monitoring
+        J --> Q[Interactive Dashboards & Charts]
+        Q --> R[Admin System Monitoring & Logs]
+    end
+
+    classDef db fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef main fill:#bbf,stroke:#333,stroke-width:2px;
+    class B db;
+    class F,J main;
+```
+
+---
+
 ## 🌐 Pages
 
 | Page | File | Role | Description |

@@ -54,7 +54,7 @@ def reset_password():
 def login():
     data = request.get_json()
     email, password, role = data.get('email'), data.get('password'), data.get('role')
-    if role == 'admin' and email != 'rifa26@gmail.com':
+    if role == 'admin' and email != 'Ayshath26@gmail.com':
         return jsonify({'message': 'Access denied. Invalid admin email.'}), 403
     db = get_db()
     if role:

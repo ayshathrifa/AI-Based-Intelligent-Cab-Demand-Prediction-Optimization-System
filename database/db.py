@@ -75,11 +75,25 @@ def init_db():
     ''')
     
     # Enforce single admin user
+    c.execute("SELECT id FROM users WHERE email = 'Ayshath26@gmail.com'")
+    if not c.fetchone():
+        import hashlib
+        hashed_pwd = hashlib.sha256('Aysha@123'.encode()).hexdigest()
+        c.execute("INSERT INTO users (name, email, password, role) VALUES ('System Admin', 'Ayshath26@gmail.com', ?, 'admin')", (hashed_pwd,))
+
+    # Seed default user
+    c.execute("SELECT id FROM users WHERE email = 'ayshathrifa26@gmail.com'")
+    if not c.fetchone():
+        import hashlib
+        hashed_pwd = hashlib.sha256('Ayshathrifa@18'.encode()).hexdigest()
+        c.execute("INSERT INTO users (name, email, password, role) VALUES ('Default User', 'ayshathrifa26@gmail.com', ?, 'user')", (hashed_pwd,))
+
+    # Seed default driver
     c.execute("SELECT id FROM users WHERE email = 'rifa26@gmail.com'")
     if not c.fetchone():
         import hashlib
-        hashed_pwd = hashlib.sha256('rifa@123'.encode()).hexdigest()
-        c.execute("INSERT INTO users (name, email, password, role) VALUES ('System Admin', 'rifa26@gmail.com', ?, 'admin')", (hashed_pwd,))
+        hashed_pwd = hashlib.sha256('Rifa@123'.encode()).hexdigest()
+        c.execute("INSERT INTO users (name, email, password, role) VALUES ('Default Driver', 'rifa26@gmail.com', ?, 'driver')", (hashed_pwd,))
 
     conn.commit()
     conn.close()
