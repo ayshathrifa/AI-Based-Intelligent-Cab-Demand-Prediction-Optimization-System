@@ -12,8 +12,6 @@ def signup():
     data = request.get_json()
     name, email, password, role = data.get('name'), data.get('email'), data.get('password'), data.get('role', 'user')
     if email: email = email.lower().strip()
-    if role == 'admin':
-        return jsonify({'message': 'Admin registration is completely disabled.'}), 403
     if not all([name, email, password]):
         return jsonify({'message': 'All fields required'}), 400
     db = get_db()
@@ -58,8 +56,6 @@ def login():
     data = request.get_json()
     email, password, role = data.get('email'), data.get('password'), data.get('role')
     if email: email = email.lower().strip()
-    if role == 'admin' and email != 'ayshath26@gmail.com':
-        return jsonify({'message': 'Access denied. Invalid admin email.'}), 403
     db = get_db()
     if role:
         user = db.execute('SELECT * FROM users WHERE email = ? AND password = ? AND role = ?',
