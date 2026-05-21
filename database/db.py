@@ -75,11 +75,11 @@ def init_db():
     ''')
     
     # Enforce single admin user
-    c.execute("SELECT id FROM users WHERE email = 'Ayshath26@gmail.com'")
+    c.execute("SELECT id FROM users WHERE email = 'ayshath26@gmail.com'")
     if not c.fetchone():
         import hashlib
         hashed_pwd = hashlib.sha256('Aysha@123'.encode()).hexdigest()
-        c.execute("INSERT INTO users (name, email, password, role) VALUES ('System Admin', 'Ayshath26@gmail.com', ?, 'admin')", (hashed_pwd,))
+        c.execute("INSERT INTO users (name, email, password, role) VALUES ('System Admin', 'ayshath26@gmail.com', ?, 'admin')", (hashed_pwd,))
 
     # Seed default user
     c.execute("SELECT id FROM users WHERE email = 'ayshathrifa26@gmail.com'")

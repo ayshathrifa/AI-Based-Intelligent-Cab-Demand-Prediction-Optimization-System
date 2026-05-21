@@ -11,6 +11,7 @@ def hash_password(password):
 def signup():
     data = request.get_json()
     name, email, password, role = data.get('name'), data.get('email'), data.get('password'), data.get('role', 'user')
+    if email: email = email.lower().strip()
     if role == 'admin':
         return jsonify({'message': 'Admin registration is completely disabled.'}), 403
     if not all([name, email, password]):
@@ -28,6 +29,7 @@ def signup():
 def check_email():
     data = request.get_json()
     email = data.get('email')
+    if email: email = email.lower().strip()
     db = get_db()
     user = db.execute('SELECT id FROM users WHERE email = ?', (email,)).fetchone()
     if user:
@@ -38,6 +40,7 @@ def check_email():
 def reset_password():
     data = request.get_json()
     email = data.get('email')
+    if email: email = email.lower().strip()
     new_password = data.get('new_password')
     if not email or not new_password:
         return jsonify({'message': 'Missing fields'}), 400
@@ -54,7 +57,8 @@ def reset_password():
 def login():
     data = request.get_json()
     email, password, role = data.get('email'), data.get('password'), data.get('role')
-    if role == 'admin' and email != 'Ayshath26@gmail.com':
+    if email: email = email.lower().strip()
+    if role == 'admin' and email != 'ayshath26@gmail.com':
         return jsonify({'message': 'Access denied. Invalid admin email.'}), 403
     db = get_db()
     if role:
